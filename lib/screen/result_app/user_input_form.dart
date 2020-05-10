@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hive/hive.dart';
-import 'package:student/screen/user_result_screen.dart';
-import '../constant.dart';
-import '../models/result_model.dart';
+import '../../screen/result_app/user_result_screen.dart';
+import '../../constant.dart';
+import '../../models/result_model.dart';
 
 class UserFormScreen extends StatelessWidget {
   static const routeName = '/user-form-page';

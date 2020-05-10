@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:student/models/result_model.dart';
-import 'package:student/screen/user_input_form.dart';
-import 'package:student/widgets/new_result_form.dart';
+import '../../widgets/mydrawer.dart';
+import '../../models/result_model.dart';
+import '../../screen/result_app/user_input_form.dart';
+import '../../widgets/new_result_form.dart';
 
-class Homepage extends StatefulWidget {
+class ResultAppHomepage extends StatefulWidget {
+  static const routeName = '/result-homepage';
   static const resultbox = "resultbox";
   static const resultsbox = "resultsbox";
 
   @override
-  _HomepageState createState() => _HomepageState();
+  _ResultAppHomepageState createState() => _ResultAppHomepageState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _ResultAppHomepageState extends State<ResultAppHomepage> {
   Future<void> inithive() async {
     await Hive.initFlutter();
     try {
@@ -22,8 +24,8 @@ class _HomepageState extends State<Homepage> {
     } catch (e) {
       print(e);
     }
-    await Hive.openBox<ResultModel>(Homepage.resultbox);
-    await Hive.openBox<Results>(Homepage.resultsbox);
+    await Hive.openBox<ResultModel>(ResultAppHomepage.resultbox);
+    await Hive.openBox<Results>(ResultAppHomepage.resultsbox);
   }
 
   double finalresult;
@@ -46,6 +48,7 @@ class _HomepageState extends State<Homepage> {
               })
         ],
       ),
+      drawer: MyDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           return showModalBottomSheet(
@@ -78,7 +81,8 @@ class _HomepageState extends State<Homepage> {
 
   Widget buildListtile(context) {
     return ValueListenableBuilder(
-      valueListenable: Hive.box<ResultModel>(Homepage.resultbox).listenable(),
+      valueListenable:
+          Hive.box<ResultModel>(ResultAppHomepage.resultbox).listenable(),
       builder: (BuildContext context, Box<ResultModel> value, Widget child) {
         return Column(
           children: <Widget>[

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:student/screen/userallresult_screen.dart';
-import '../models/result_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../constant.dart';
+import '../../screen/result_app/userallresult_screen.dart';
+import '../../models/result_model.dart';
+import '../../constant.dart';
 
 class UserResultScreen extends StatelessWidget {
   static const routeName = "/user-results-screen";

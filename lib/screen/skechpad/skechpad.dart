@@ -4,14 +4,14 @@ import 'package:hive/hive.dart';
 
 const sketchBox = 'sketchpadBox';
 
-void main() async {
-  await Hive.initFlutter();
-  Hive.registerAdapter(ColoredPathAdapter());
-  await Hive.openBox<ColoredPath>(sketchBox);
-  runApp(DrawApp());
-}
+// void main() async {
+
+//   runApp(DrawApp());
+// }
 
 class DrawApp extends StatelessWidget {
+  static const routeName = "/skechpad";
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
