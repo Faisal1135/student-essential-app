@@ -17,13 +17,13 @@ class ResultAppHomepage extends StatefulWidget {
 
 class _ResultAppHomepageState extends State<ResultAppHomepage> {
   Future<void> inithive() async {
-    await Hive.initFlutter();
-    try {
-      Hive.registerAdapter<ResultModel>(ResultModelAdapter());
-      Hive.registerAdapter<Results>(ResultsAdapter());
-    } catch (e) {
-      print(e);
-    }
+    // await Hive.initFlutter();
+    // try {
+    //   Hive.registerAdapter<ResultModel>(ResultModelAdapter());
+    //   Hive.registerAdapter<Results>(ResultsAdapter());
+    // } catch (e) {
+    //   print(e);
+    // }
     await Hive.openBox<ResultModel>(ResultAppHomepage.resultbox);
     await Hive.openBox<Results>(ResultAppHomepage.resultsbox);
   }

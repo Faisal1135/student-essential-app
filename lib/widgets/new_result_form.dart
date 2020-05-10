@@ -92,7 +92,6 @@ class _NewResultInputState extends State<NewResultInput> {
                       courseName: courseInputController.text,
                       credit: double.parse(creditInputController.text),
                       grade: selectedCGPA);
-
                   await Hive.box<ResultModel>('resultbox').add(resultcard);
                 },
                 child: Row(

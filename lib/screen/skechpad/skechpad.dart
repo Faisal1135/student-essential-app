@@ -68,7 +68,7 @@ class ColoredPath {
 
 class ColoredPathAdapter extends TypeAdapter<ColoredPath> {
   @override
-  final typeId = 0;
+  final typeId = 3;
 
   @override
   ColoredPath read(BinaryReader reader) {

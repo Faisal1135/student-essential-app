@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import './models/result_model.dart';
+import './models/routine_model.dart';
 import './screen/main_screen.dart';
 import './screen/result_app/home_page.dart';
 import './screen/result_app/user_input_form.dart';
 import './screen/result_app/user_result_screen.dart';
 import './screen/result_app/userallresult_screen.dart';
+import './screen/routine_app/home_page.dart';
 import 'screen/skechpad/skechpad.dart';
 
-void main() => runApp(MyApp());
+// void main() => runApp(MyApp());
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(ColoredPathAdapter());
+  Hive.registerAdapter<ResultModel>(ResultModelAdapter());
+  Hive.registerAdapter<Results>(ResultsAdapter());
+  Hive.registerAdapter<RoutineItem>(RoutineItemAdapter());
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -27,7 +40,9 @@ class MyApp extends StatelessWidget {
         UserFormScreen.routeName: (context) => UserFormScreen(),
         UserResultScreen.routeName: (context) => UserResultScreen(),
         ResultofUserScreen.routeName: (context) => ResultofUserScreen(),
-        //
+
+        //Routine App
+        RoutinePage.routeName: (context) => RoutinePage(),
       },
     );
   }
