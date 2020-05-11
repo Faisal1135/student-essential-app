@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:hive/hive.dart';
-import 'package:student/constant.dart';
-import 'package:student/screen/routine_app/home_page.dart';
+import '../constant.dart';
+import '../screen/ocr/homepage.dart';
+import '../screen/routine_app/home_page.dart';
 import '../models/routine_model.dart';
 import '../screen/result_app/home_page.dart';
 import '../screen/skechpad/skechpad.dart';
@@ -49,6 +50,12 @@ class MyDrawer extends StatelessWidget {
             onTap: () async {
               await Hive.openBox<RoutineItem>(kHiveRoutineBox);
               Navigator.pushReplacementNamed(context, RoutinePage.routeName);
+            },
+          ),
+          ListTile(
+            title: Text('Text Recognizer'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, OcrPage.routeName);
             },
           ),
         ],

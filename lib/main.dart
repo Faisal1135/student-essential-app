@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:student/screen/ocr/homepage.dart';
 import './models/result_model.dart';
 import './models/routine_model.dart';
 import './screen/main_screen.dart';
@@ -11,7 +12,6 @@ import './screen/result_app/userallresult_screen.dart';
 import './screen/routine_app/home_page.dart';
 import 'screen/skechpad/skechpad.dart';
 
-// void main() => runApp(MyApp());
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ColoredPathAdapter());
@@ -43,6 +43,8 @@ class MyApp extends StatelessWidget {
 
         //Routine App
         RoutinePage.routeName: (context) => RoutinePage(),
+        //Ocr APP
+        OcrPage.routeName: (context) => OcrPage(),
       },
     );
   }

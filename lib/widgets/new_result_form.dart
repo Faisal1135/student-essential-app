@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-import 'package:student/meta_data.dart';
+import '../data/meta_data.dart';
 import 'package:student/models/result_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -109,55 +109,3 @@ class _NewResultInputState extends State<NewResultInput> {
     );
   }
 }
-
-// class NewResultInput extends StatelessWidget {
-//   const NewResultInput({Key key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-//     return Container(
-//       padding: const EdgeInsets.all(10),
-//       height: MediaQuery.of(context).size.height * 0.9,
-//       child: Column(
-//         children: <Widget>[
-//           FormBuilder(
-//               key: _fbKey,
-//               initialValue: {'grade': 4.0},
-//               autovalidate: true,
-//               child: Column(
-//                 children: <Widget>[
-//                   FormBuilderTextField(
-//                     attribute: "coarseName",
-//                     decoration: InputDecoration(labelText: "Course Name"),
-//                     keyboardType: TextInputType.text,
-//                     validators: [
-//                       FormBuilderValidators.required(),
-//                       FormBuilderValidators.max(70),
-//                     ],
-//                   ),
-//                   FormBuilderTextField(
-//                     attribute: 'credit',
-//                     decoration: InputDecoration(labelText: "Enter your credit"),
-//                     validators: [
-//                       FormBuilderValidators.required(),
-//                       FormBuilderValidators.numeric(),
-//                     ],
-//                   ),
-//                   FormBuilderDropdown(
-//                     attribute: 'grade',
-//                     decoration: InputDecoration(labelText: "Choose Grade"),
-//                     items: cgpaFinder.keys.map((k) {
-//                       return DropdownMenuItem(
-//                         value: cgpaFinder[k],
-//                         child: Text(k),
-//                       );
-//                     }).toList(),
-//                   )
-//                 ],
-//               ))
-//         ],
-//       ),
-//     );
-//   }
-// }

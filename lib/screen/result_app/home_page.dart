@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:student/constant.dart';
 import '../../widgets/mydrawer.dart';
 import '../../models/result_model.dart';
 import '../../screen/result_app/user_input_form.dart';
@@ -17,15 +18,14 @@ class ResultAppHomepage extends StatefulWidget {
 
 class _ResultAppHomepageState extends State<ResultAppHomepage> {
   Future<void> inithive() async {
-    // await Hive.initFlutter();
-    // try {
-    //   Hive.registerAdapter<ResultModel>(ResultModelAdapter());
-    //   Hive.registerAdapter<Results>(ResultsAdapter());
-    // } catch (e) {
-    //   print(e);
-    // }
     await Hive.openBox<ResultModel>(ResultAppHomepage.resultbox);
     await Hive.openBox<Results>(ResultAppHomepage.resultsbox);
+  }
+
+  @override
+  void dispose() {
+    Hive.box(kresultBox).close();
+    super.dispose();
   }
 
   double finalresult;

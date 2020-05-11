@@ -16,19 +16,10 @@ class RoutinePage extends StatefulWidget {
 }
 
 class _RoutinePageState extends State<RoutinePage> {
-//  void populatefromDatabase() {
-//     final allRoutinefromDb =
-//         Hive.box<RoutineItem>(kHiveRoutineBox).values.toList();
-
-//     Provider.of<RoutineProvider>(context, listen: false)
-//         .addManyRoutine(allRoutinefromDb);
-//   }
-
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Hive.deleteFromDisk();
-    // populatefromDatabase();
+  void dispose() {
+    Hive.box(kHiveRoutineBox).close();
+    super.dispose();
   }
 
   int getRowHeight(List<RoutineItem> allRoutineFromDb) {
