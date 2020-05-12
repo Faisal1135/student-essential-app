@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:hive/hive.dart';
+import 'package:student/models/note_model.dart';
+import '../screen/notes/note_main_page.dart';
 import '../constant.dart';
 import '../screen/ocr/homepage.dart';
 import '../screen/routine_app/home_page.dart';
@@ -56,6 +58,19 @@ class MyDrawer extends StatelessWidget {
             title: Text('Text Recognizer'),
             onTap: () {
               Navigator.pushReplacementNamed(context, OcrPage.routeName);
+            },
+          ),
+          ListTile(
+            title: Text('Notes'),
+            onTap: () async {
+              // if (Hive.box(kHiveNoteBox).isOpen) {
+              //   Navigator.pushReplacementNamed(context, NotesScreen.routeName);
+              // } else {
+              try {
+                await Hive.openBox<NoteModel>(kHiveNoteBox);
+              } catch (e) {}
+              Navigator.pushReplacementNamed(context, NotesScreen.routeName);
+              // }
             },
           ),
         ],

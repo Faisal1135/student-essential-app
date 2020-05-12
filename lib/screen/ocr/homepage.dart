@@ -38,36 +38,28 @@ class _OcrPageState extends State<OcrPage> {
     setState(() {
       extractText = readText.text;
     });
-    // for (TextBlock block in readText.blocks) {
-    //   // print(block.text);
-    //   for (TextLine line in block.lines) {
-    //     // print(line.text);
-    //     for (TextElement words in line.elements) {
-    //       // print(words.text);
-    //     }
-    //   }
-    // }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Title'),
+        title: Text('Text Recognizer'),
       ),
       drawer: MyDrawer(),
-      body: Column(
+      body: ListView(
         children: <Widget>[
           isImageLoaded
               ? Center(
                   child: Container(
-                  height: 200.0,
-                  width: 200,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: FileImage(pickedImage), fit: BoxFit.cover),
+                    height: 200.0,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: FileImage(pickedImage), fit: BoxFit.cover),
+                    ),
                   ),
-                ))
+                )
               : Container(),
           SizedBox(height: 20.0),
           Row(

@@ -7,9 +7,7 @@ part of 'result_model.dart';
 // **************************************************************************
 
 class ResultModelAdapter extends TypeAdapter<ResultModel> {
-  @override
   final typeId = 0;
-
   @override
   ResultModel read(BinaryReader reader) {
     var numOfFields = reader.readByte();
@@ -40,9 +38,7 @@ class ResultModelAdapter extends TypeAdapter<ResultModel> {
 }
 
 class ResultsAdapter extends TypeAdapter<Results> {
-  @override
   final typeId = 1;
-
   @override
   Results read(BinaryReader reader) {
     var numOfFields = reader.readByte();

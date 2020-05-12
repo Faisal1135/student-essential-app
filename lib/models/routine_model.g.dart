@@ -7,9 +7,7 @@ part of 'routine_model.dart';
 // **************************************************************************
 
 class RoutineItemAdapter extends TypeAdapter<RoutineItem> {
-  @override
   final typeId = 4;
-
   @override
   RoutineItem read(BinaryReader reader) {
     var numOfFields = reader.readByte();

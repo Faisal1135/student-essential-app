@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 
 part 'routine_model.g.dart';
 
-@HiveType(typeId: 0)
+@HiveType(typeId: 4)
 class RoutineItem {
   @HiveField(0)
   final id;

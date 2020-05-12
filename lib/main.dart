@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:student/screen/ocr/homepage.dart';
+import './screen/notes/note_edit.dart';
+import './screen/ocr/homepage.dart';
 import './models/result_model.dart';
 import './models/routine_model.dart';
 import './screen/main_screen.dart';
@@ -10,6 +11,8 @@ import './screen/result_app/user_input_form.dart';
 import './screen/result_app/user_result_screen.dart';
 import './screen/result_app/userallresult_screen.dart';
 import './screen/routine_app/home_page.dart';
+import 'models/note_model.dart';
+import 'screen/notes/note_main_page.dart';
 import 'screen/skechpad/skechpad.dart';
 
 void main() async {
@@ -18,6 +21,9 @@ void main() async {
   Hive.registerAdapter<ResultModel>(ResultModelAdapter());
   Hive.registerAdapter<Results>(ResultsAdapter());
   Hive.registerAdapter<RoutineItem>(RoutineItemAdapter());
+  Hive.registerAdapter<NoteModel>(NoteModelAdapter());
+  Hive.registerAdapter<NoteTag>(NoteTagAdapter());
+
   runApp(MyApp());
 }
 
@@ -45,6 +51,9 @@ class MyApp extends StatelessWidget {
         RoutinePage.routeName: (context) => RoutinePage(),
         //Ocr APP
         OcrPage.routeName: (context) => OcrPage(),
+        //NoteApp
+        NotesScreen.routeName: (context) => NotesScreen(),
+        EditNotePage.routeName: (context) => EditNotePage()
       },
     );
   }
