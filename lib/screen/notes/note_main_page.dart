@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:student/constant.dart';
+import 'package:student/screen/notes/note_catagory.dart';
 import 'package:student/screen/notes/note_edit.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../widgets/mydrawer.dart';
@@ -19,11 +20,12 @@ class _NotesScreenState extends State<NotesScreen>
   TabController _tabController;
   final DateFormat _dateFormatter = DateFormat('dd MMM');
   final DateFormat _timeFormatter = DateFormat('h:mm');
+  List<NoteModel> showNotes;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(initialIndex: 0, length: 3, vsync: this);
+    _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
   }
 
   final nonModWid = Column(
@@ -58,12 +60,19 @@ class _NotesScreenState extends State<NotesScreen>
     ],
   );
 
-  Widget _buildCategoryCard(int index, String title, int count) {
+  Widget _buildCategoryCard(
+      int index, NoteTag tag, int count, List<NoteModel> argList) {
     return GestureDetector(
       onTap: () {
         setState(() {
           _selectedCategoryIndex = index;
         });
+      },
+      onDoubleTap: () {
+        List<NoteModel> passarg =
+            argList.where((note) => note.noteTag == tag).toList();
+        Navigator.of(context)
+            .pushNamed(NoteCatagoryScreen.routeName, arguments: passarg);
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
@@ -90,7 +99,7 @@ class _NotesScreenState extends State<NotesScreen>
             Padding(
               padding: EdgeInsets.all(20.0),
               child: Text(
-                title,
+                noteTagString[tag],
                 style: TextStyle(
                   color: _selectedCategoryIndex == index
                       ? Colors.white
@@ -119,15 +128,58 @@ class _NotesScreenState extends State<NotesScreen>
     );
   }
 
-  Widget _buildNotesList(List<NoteModel> notes) {
-    return Container(
-      height: 600,
-      child: ListView.builder(
-        itemCount: notes.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Container();
-        },
-      ),
+  Column _buildNotesList(List<NoteModel> notes) {
+    return Column(
+      children: notes
+          .map(
+            (note) => InkWell(
+              onTap: () => Navigator.pushNamed(context, EditNotePage.routeName,
+                  arguments: note),
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 30.0),
+                padding: EdgeInsets.all(30.0),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF5F7FB),
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          note.title,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          _timeFormatter.format(note.datetime),
+                          style: TextStyle(
+                            color: Color(0xFFAFB4C6),
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 15.0),
+                    Text(
+                      note.content,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 
@@ -142,18 +194,24 @@ class _NotesScreenState extends State<NotesScreen>
       body: ValueListenableBuilder(
         valueListenable: Hive.box<NoteModel>(kHiveNoteBox).listenable(),
         builder: (BuildContext context, Box<NoteModel> value, Widget ch) {
-          final Map<String, int> categories = {
-            'Notes': value.values.length,
-            'Work': value.values
+          final Map<NoteTag, int> categories = {
+            NoteTag.Notes: value.values.length,
+            NoteTag.Work: value.values
                 .where((note) => note.noteTag == NoteTag.Work)
                 .length,
-            'Home': value.values
+            NoteTag.Home: value.values
                 .where((note) => note.noteTag == NoteTag.Home)
                 .length,
-            'Complete': value.values
+            NoteTag.Complete: value.values
                 .where((note) => note.noteTag == NoteTag.Complete)
                 .length,
           };
+          if (_tabController.index == 1) {
+            showNotes =
+                value.values.where((note) => note.isImportent == true).toList();
+          } else {
+            showNotes = value.values.toList();
+          }
           final Size size = MediaQuery.of(context).size;
 
           return ListView(
@@ -172,6 +230,7 @@ class _NotesScreenState extends State<NotesScreen>
                       index - 1,
                       categories.keys.toList()[index - 1],
                       categories.values.toList()[index - 1],
+                      value.values.toList(),
                     );
                   },
                 ),
@@ -205,67 +264,10 @@ class _NotesScreenState extends State<NotesScreen>
                         ),
                       ),
                     ),
-                    Tab(
-                      child: Text(
-                        'Performed',
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
-              Column(
-                children: value.values
-                    .toList()
-                    .map(
-                      (note) => Container(
-                        margin: EdgeInsets.symmetric(horizontal: 30.0),
-                        padding: EdgeInsets.all(30.0),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFF5F7FB),
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  note.title,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                Text(
-                                  _timeFormatter.format(note.datetime),
-                                  style: TextStyle(
-                                    color: Color(0xFFAFB4C6),
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 15.0),
-                            Text(
-                              note.content,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    .toList(),
-              )
+              _buildNotesList(value.values.toList())
             ],
           );
         },
@@ -273,3 +275,60 @@ class _NotesScreenState extends State<NotesScreen>
     );
   }
 }
+
+// Column(
+//                 children: value.values
+//                     .where((note) => note.isImportent == true)
+//                     .toList()
+//                     .map(
+//                       (note) => InkWell(
+//                         onTap: () => Navigator.pushNamed(
+//                             context, EditNotePage.routeName,
+//                             arguments: note),
+//                         child: Container(
+//                           margin: EdgeInsets.symmetric(horizontal: 30.0),
+//                           padding: EdgeInsets.all(30.0),
+//                           decoration: BoxDecoration(
+//                             color: Color(0xFFF5F7FB),
+//                             borderRadius: BorderRadius.circular(30.0),
+//                           ),
+//                           child: Column(
+//                             children: <Widget>[
+//                               Row(
+//                                 mainAxisAlignment:
+//                                     MainAxisAlignment.spaceBetween,
+//                                 children: <Widget>[
+//                                   Text(
+//                                     note.title,
+//                                     style: TextStyle(
+//                                       color: Colors.black,
+//                                       fontSize: 18.0,
+//                                       fontWeight: FontWeight.w600,
+//                                     ),
+//                                   ),
+//                                   Text(
+//                                     _timeFormatter.format(note.datetime),
+//                                     style: TextStyle(
+//                                       color: Color(0xFFAFB4C6),
+//                                       fontSize: 18.0,
+//                                       fontWeight: FontWeight.w500,
+//                                     ),
+//                                   ),
+//                                 ],
+//                               ),
+//                               SizedBox(height: 15.0),
+//                               Text(
+//                                 note.content,
+//                                 style: TextStyle(
+//                                   color: Colors.black,
+//                                   fontSize: 18.0,
+//                                   fontWeight: FontWeight.w500,
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                         ),
+//                       ),
+//                     )
+//                     .toList(),
+//               )

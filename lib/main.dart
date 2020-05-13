@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import './screen/notes/note_catagory.dart';
 import './screen/notes/note_edit.dart';
 import './screen/ocr/homepage.dart';
 import './models/result_model.dart';
@@ -53,7 +54,8 @@ class MyApp extends StatelessWidget {
         OcrPage.routeName: (context) => OcrPage(),
         //NoteApp
         NotesScreen.routeName: (context) => NotesScreen(),
-        EditNotePage.routeName: (context) => EditNotePage()
+        EditNotePage.routeName: (context) => EditNotePage(),
+        NoteCatagoryScreen.routeName: (context) => NoteCatagoryScreen(),
       },
     );
   }

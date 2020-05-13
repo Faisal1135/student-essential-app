@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 
 part 'note_model.g.dart';
@@ -19,11 +20,15 @@ class NoteModel {
   @HiveField(5)
   bool isImportent;
 
+  @HiveField(6)
+  String id;
+
   NoteModel(
-      {this.title,
-      this.content,
-      this.datetime,
-      this.noteTag,
+      {@required this.id,
+      @required this.title,
+      @required this.content,
+      @required this.datetime,
+      this.noteTag = NoteTag.Notes,
       this.isImportent = false});
 }
 

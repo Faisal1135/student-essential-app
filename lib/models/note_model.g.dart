@@ -45,23 +45,27 @@ class NoteTagAdapter extends TypeAdapter<NoteTag> {
 
 class NoteModelAdapter extends TypeAdapter<NoteModel> {
   final typeId = 5;
+  @override
   NoteModel read(BinaryReader reader) {
     var numOfFields = reader.readByte();
     var fields = <int, dynamic>{
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return NoteModel()
-      ..title = fields[0] as String
-      ..content = fields[2] as String
-      ..datetime = fields[3] as DateTime
-      ..noteTag = fields[4] as NoteTag
-      ..isImportent = fields[5] as bool;
+    return NoteModel(
+      title: fields[0] as String,
+      content: fields[2] as String,
+      datetime: fields[3] as DateTime,
+      noteTag: fields[4] as NoteTag,
+      isImportent: fields[5] as bool,
+      id: fields[6] as String,
+    );
+    // ..id = fields[6] as String
   }
 
   @override
   void write(BinaryWriter writer, NoteModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(2)
@@ -71,6 +75,8 @@ class NoteModelAdapter extends TypeAdapter<NoteModel> {
       ..writeByte(4)
       ..write(obj.noteTag)
       ..writeByte(5)
-      ..write(obj.isImportent);
+      ..write(obj.isImportent)
+      ..writeByte(6)
+      ..write(obj.id);
   }
 }

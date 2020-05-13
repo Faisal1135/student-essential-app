@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:student/constant.dart';
 import 'package:student/models/note_model.dart';
+import 'package:uuid/uuid.dart';
 
 class EditNotePage extends StatefulWidget {
   static const routeName = "/edit-note-route";
@@ -12,6 +13,7 @@ class EditNotePage extends StatefulWidget {
 }
 
 class _EditNotePageState extends State<EditNotePage> {
+  NoteModel currentNote;
   bool isDirty = false;
   bool isNoteNew = true;
   FocusNode titleFocus = FocusNode();
@@ -21,8 +23,22 @@ class _EditNotePageState extends State<EditNotePage> {
   TextEditingController contentController = TextEditingController();
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    currentNote = ModalRoute.of(context).settings.arguments as NoteModel;
+    if (currentNote == null) {
+      currentNote = NoteModel(
+          id: Uuid().v4(), title: "", content: "", datetime: DateTime.now());
+      isNoteNew = true;
+    } else {
+      isNoteNew = false;
+    }
+    titleController.text = currentNote.title;
+    contentController.text = currentNote.content;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final currentNote = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -35,7 +51,7 @@ class _EditNotePageState extends State<EditNotePage> {
                 padding: const EdgeInsets.all(16.0),
                 child: TextField(
                   focusNode: titleFocus,
-                  autofocus: true,
+                  autofocus: isNoteNew,
                   controller: titleController,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
@@ -102,13 +118,18 @@ class _EditNotePageState extends State<EditNotePage> {
                     Spacer(),
                     IconButton(
                       tooltip: 'Mark note as important',
-                      icon: Icon(Icons.flag),
-                      onPressed: null,
+                      icon: Icon(currentNote.isImportent
+                          ? Icons.flag
+                          : Icons.outlined_flag),
+                      onPressed: titleController.text.trim().isNotEmpty &&
+                              contentController.text.trim().isNotEmpty
+                          ? markImportantAsDirty
+                          : null,
                     ),
                     IconButton(
                       icon: Icon(Icons.delete_outline),
-                      onPressed: () {
-                        handleDelete();
+                      onPressed: () async {
+                        await handleDelete();
                       },
                     ),
                     AnimatedContainer(
@@ -145,27 +166,76 @@ class _EditNotePageState extends State<EditNotePage> {
     );
   }
 
-  void handleSave() {
+  Future<void> handleSave() async {
     if (titleController.text.isEmpty || contentController.text.isEmpty) {
       return;
     }
-    final NoteModel newNote = NoteModel(
-        title: titleController.text,
-        content: contentController.text,
-        datetime: DateTime.now(),
-        isImportent: false,
-        noteTag: NoteTag.Notes);
-    Hive.box<NoteModel>(kHiveNoteBox).add(newNote);
-
     setState(() {
-      titleController.text = newNote.title;
-      contentController.text = newNote.content;
-      titleFocus.unfocus();
-      contentFocus.unfocus();
+      currentNote.title = titleController.text;
+      currentNote.content = contentController.text;
+      print('Hey there ${currentNote.content}');
     });
+    if (isNoteNew) {
+      await Hive.box<NoteModel>(kHiveNoteBox).put(currentNote.id, currentNote);
+    } else {
+      await Hive.box<NoteModel>(kHiveNoteBox).put(currentNote.id, currentNote);
+    }
+    setState(() {
+      isNoteNew = false;
+      isDirty = false;
+    });
+    titleFocus.unfocus();
+    contentFocus.unfocus();
   }
 
-  void handleDelete() {}
+  void markImportantAsDirty() {
+    setState(() {
+      currentNote.isImportent = !currentNote.isImportent;
+    });
+    handleSave();
+  }
+
+  Future<void> handleDelete() async {
+    if (isNoteNew) {
+      Navigator.pop(context);
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              title: Text('Delete Note'),
+              content: Text('This note will be deleted permanently'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('DELETE',
+                      style: TextStyle(
+                          color: Colors.red.shade300,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 1)),
+                  onPressed: () async {
+                    await Hive.box<NoteModel>(kHiveNoteBox)
+                        .delete(currentNote.id);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                ),
+                FlatButton(
+                  child: Text('CANCEL',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 1)),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
 
   void handleBack() {
     Navigator.pop(context);
