@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:student/models/note_model.dart';
+import 'package:student/widgets/notegriditem.dart';
 
 class NoteCatagoryScreen extends StatelessWidget {
   static const routeName = "/note-catagory";
@@ -7,18 +9,19 @@ class NoteCatagoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedTag =
-        ModalRoute.of(context).settings.arguments as List<NoteModel>;
-    print(selectedTag);
+    final notes = ModalRoute.of(context).settings.arguments as List<NoteModel>;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Title'),
       ),
-      body: ListView.builder(
-        itemCount: selectedTag.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Text(selectedTag[index].title);
-        },
+      body: StaggeredGridView.countBuilder(
+        crossAxisCount: 4,
+        itemCount: notes.length,
+        itemBuilder: (BuildContext context, int i) => NoteGriditem(
+          note: notes[i],
+        ),
+        staggeredTileBuilder: (int i) => StaggeredTile.fit(2),
       ),
     );
   }
