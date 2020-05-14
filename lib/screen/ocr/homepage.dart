@@ -62,20 +62,23 @@ class _OcrPageState extends State<OcrPage> {
                 )
               : Container(),
           SizedBox(height: 20.0),
-          Row(
-            children: <Widget>[
-              RaisedButton(
-                onPressed: pickImage,
-                child: Text('Pick an Image'),
-              ),
-              SizedBox(
-                width: 10.0,
-              ),
-              RaisedButton(
-                onPressed: isImageLoaded ? readText : null,
-                child: Text('Read text from image'),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: pickImage,
+                  child: Text('Pick an Image'),
+                ),
+                SizedBox(
+                  width: 10.0,
+                ),
+                RaisedButton(
+                  onPressed: isImageLoaded ? readText : null,
+                  child: Text('Read text from image'),
+                ),
+              ],
+            ),
           ),
           Container(
             child: FittedBox(

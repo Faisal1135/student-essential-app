@@ -28,7 +28,7 @@ class NoteModel {
       @required this.title,
       @required this.content,
       @required this.datetime,
-      this.noteTag = NoteTag.Notes,
+      this.noteTag = NoteTag.Home,
       this.isImportent = false});
 }
 
@@ -39,14 +39,15 @@ enum NoteTag {
   @HiveField(1)
   Work,
   @HiveField(2)
-  Notes,
+  Important,
   @HiveField(3)
   Complete,
 }
+//Remeber bear you change this cuz you need to update this to important section
 
 const noteTagString = <NoteTag, String>{
   NoteTag.Home: "Home",
-  NoteTag.Notes: "Notes",
+  NoteTag.Important: "Important",
   NoteTag.Work: "Work",
   NoteTag.Complete: "Complete"
 };

@@ -10,27 +10,47 @@ class ResultofUserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final result =
-        ModalRoute.of(context).settings.arguments as List<ResultModel>;
+    final results = ModalRoute.of(context).settings.arguments as Results;
+    final result = results.allresult;
     return Scaffold(
       appBar: AppBar(
         title: Text('User Result'),
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height * 0.9,
-        child: ListView.builder(
-          itemCount: result.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ListTile(
+      body: Column(
+        children: [
+          Hero(
+            tag: results.id,
+            child: ListTile(
               leading: CircleAvatar(
-                child: Text(result[index].grade.toString()),
-                radius: 20,
+                radius: 30,
+                backgroundColor: Colors.amber,
+                child: Text(results.cgpa),
               ),
-              title: Text(result[index].courseName),
-              subtitle: Text(result[index].credit.toString()),
-            );
-          },
-        ),
+              title: Text(results.username),
+              subtitle: Text(results.id),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: result.length,
+              primary: false,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  leading: CircleAvatar(
+                    child: Text(result[index].grade.toString()),
+                    radius: 20,
+                  ),
+                  title: Text(result[index].courseName),
+                  subtitle: Text(result[index].credit.toString()),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

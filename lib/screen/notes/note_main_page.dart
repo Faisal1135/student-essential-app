@@ -17,7 +17,6 @@ class NotesScreen extends StatefulWidget {
 class _NotesScreenState extends State<NotesScreen>
     with SingleTickerProviderStateMixin {
   int _selectedCategoryIndex = 0;
-  TabController _tabController;
   final DateFormat _dateFormatter = DateFormat('dd MMM');
   final DateFormat _timeFormatter = DateFormat('h:mm');
   List<NoteModel> showNotes;
@@ -25,12 +24,10 @@ class _NotesScreenState extends State<NotesScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
   }
 
   final nonModWid = Column(
     children: <Widget>[
-      SizedBox(height: 40),
       Padding(
         padding: const EdgeInsets.all(30.0),
         child: Row(
@@ -48,7 +45,7 @@ class _NotesScreenState extends State<NotesScreen>
             ),
             SizedBox(width: 20.0),
             Text(
-              'Jenny Breaks',
+              'Bear Galib',
               style: TextStyle(
                 fontSize: 28.0,
                 fontWeight: FontWeight.bold,
@@ -69,8 +66,9 @@ class _NotesScreenState extends State<NotesScreen>
         });
       },
       onDoubleTap: () {
-        List<NoteModel> passarg =
-            argList.where((note) => note.noteTag == tag).toList();
+        List<NoteModel> passarg = tag == NoteTag.Important
+            ? argList.where((note) => note.isImportent == true).toList()
+            : argList.where((note) => note.noteTag == tag).toList();
         Navigator.of(context)
             .pushNamed(NoteCatagoryScreen.routeName, arguments: passarg);
       },
@@ -195,7 +193,8 @@ class _NotesScreenState extends State<NotesScreen>
         valueListenable: Hive.box<NoteModel>(kHiveNoteBox).listenable(),
         builder: (BuildContext context, Box<NoteModel> value, Widget ch) {
           final Map<NoteTag, int> categories = {
-            NoteTag.Notes: value.values.length,
+            NoteTag.Important:
+                value.values.where((note) => note.isImportent == true).length,
             NoteTag.Work: value.values
                 .where((note) => note.noteTag == NoteTag.Work)
                 .length,
@@ -206,12 +205,6 @@ class _NotesScreenState extends State<NotesScreen>
                 .where((note) => note.noteTag == NoteTag.Complete)
                 .length,
           };
-          if (_tabController.index == 1) {
-            showNotes =
-                value.values.where((note) => note.isImportent == true).toList();
-          } else {
-            showNotes = value.values.toList();
-          }
           final Size size = MediaQuery.of(context).size;
 
           return ListView(
@@ -235,38 +228,6 @@ class _NotesScreenState extends State<NotesScreen>
                   },
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0),
-                child: TabBar(
-                  controller: _tabController,
-                  labelColor: Colors.black,
-                  unselectedLabelColor: Color(0xFFAFB4C6),
-                  indicatorColor: Color(0xFF417BFB),
-                  indicatorSize: TabBarIndicatorSize.label,
-                  indicatorWeight: 4.0,
-                  isScrollable: true,
-                  tabs: <Widget>[
-                    Tab(
-                      child: Text(
-                        'Notes',
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Tab(
-                      child: Text(
-                        'Important',
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               _buildNotesList(value.values.toList())
             ],
           );
@@ -276,59 +237,35 @@ class _NotesScreenState extends State<NotesScreen>
   }
 }
 
-// Column(
-//                 children: value.values
-//                     .where((note) => note.isImportent == true)
-//                     .toList()
-//                     .map(
-//                       (note) => InkWell(
-//                         onTap: () => Navigator.pushNamed(
-//                             context, EditNotePage.routeName,
-//                             arguments: note),
-//                         child: Container(
-//                           margin: EdgeInsets.symmetric(horizontal: 30.0),
-//                           padding: EdgeInsets.all(30.0),
-//                           decoration: BoxDecoration(
-//                             color: Color(0xFFF5F7FB),
-//                             borderRadius: BorderRadius.circular(30.0),
-//                           ),
-//                           child: Column(
-//                             children: <Widget>[
-//                               Row(
-//                                 mainAxisAlignment:
-//                                     MainAxisAlignment.spaceBetween,
-//                                 children: <Widget>[
-//                                   Text(
-//                                     note.title,
-//                                     style: TextStyle(
-//                                       color: Colors.black,
-//                                       fontSize: 18.0,
-//                                       fontWeight: FontWeight.w600,
-//                                     ),
-//                                   ),
-//                                   Text(
-//                                     _timeFormatter.format(note.datetime),
-//                                     style: TextStyle(
-//                                       color: Color(0xFFAFB4C6),
-//                                       fontSize: 18.0,
-//                                       fontWeight: FontWeight.w500,
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                               SizedBox(height: 15.0),
-//                               Text(
-//                                 note.content,
-//                                 style: TextStyle(
-//                                   color: Colors.black,
-//                                   fontSize: 18.0,
-//                                   fontWeight: FontWeight.w500,
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
+// Padding(
+//                 padding: EdgeInsets.only(left: 15.0),
+//                 child: TabBar(
+//                   controller: _tabController,
+//                   labelColor: Colors.black,
+//                   unselectedLabelColor: Color(0xFFAFB4C6),
+//                   indicatorColor: Color(0xFF417BFB),
+//                   indicatorSize: TabBarIndicatorSize.label,
+//                   indicatorWeight: 4.0,
+//                   isScrollable: true,
+//                   tabs: <Widget>[
+//                     Tab(
+//                       child: Text(
+//                         'Notes',
+//                         style: TextStyle(
+//                           fontSize: 22.0,
+//                           fontWeight: FontWeight.bold,
 //                         ),
 //                       ),
-//                     )
-//                     .toList(),
-//               )
+//                     ),
+//                     Tab(
+//                       child: Text(
+//                         'Important',
+//                         style: TextStyle(
+//                           fontSize: 22.0,
+//                           fontWeight: FontWeight.bold,
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),

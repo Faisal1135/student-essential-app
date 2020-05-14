@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+//screen import
 import './screen/notes/note_catagory.dart';
 import './screen/notes/note_edit.dart';
 import './screen/ocr/homepage.dart';
-import './models/result_model.dart';
-import './models/routine_model.dart';
 import './screen/main_screen.dart';
 import './screen/result_app/home_page.dart';
 import './screen/result_app/user_input_form.dart';
 import './screen/result_app/user_result_screen.dart';
 import './screen/result_app/userallresult_screen.dart';
 import './screen/routine_app/home_page.dart';
-import 'models/note_model.dart';
-import 'screen/notes/note_main_page.dart';
-import 'screen/skechpad/skechpad.dart';
+import './screen/notes/note_main_page.dart';
+import './screen/skechpad/skechpad.dart';
+//model imoport
+import './models/note_model.dart';
+import './models/result_model.dart';
+import './models/routine_model.dart';
 
 void main() async {
   await Hive.initFlutter();

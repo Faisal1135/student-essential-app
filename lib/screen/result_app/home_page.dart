@@ -19,7 +19,6 @@ class ResultAppHomepage extends StatefulWidget {
 class _ResultAppHomepageState extends State<ResultAppHomepage> {
   Future<void> inithive() async {
     await Hive.openBox<ResultModel>(ResultAppHomepage.resultbox);
-    await Hive.openBox<Results>(ResultAppHomepage.resultsbox);
   }
 
   @override
@@ -48,7 +47,6 @@ class _ResultAppHomepageState extends State<ResultAppHomepage> {
               })
         ],
       ),
-      drawer: MyDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           return showModalBottomSheet(

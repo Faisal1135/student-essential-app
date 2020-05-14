@@ -11,14 +11,15 @@ class NoteCatagoryScreen extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as List<NoteModel>;
     print(selectedTag);
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Title'),
-        ),
-        body: ListView.builder(
-          itemCount: selectedTag.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Text(selectedTag[index].title);
-          },
-        ));
+      appBar: AppBar(
+        title: Text('Title'),
+      ),
+      body: ListView.builder(
+        itemCount: selectedTag.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Text(selectedTag[index].title);
+        },
+      ),
+    );
   }
 }

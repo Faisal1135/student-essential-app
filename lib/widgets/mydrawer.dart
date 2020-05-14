@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:hive/hive.dart';
-import 'package:student/models/note_model.dart';
+import '../models/note_model.dart';
+import '../models/result_model.dart';
 import '../screen/notes/note_main_page.dart';
 import '../constant.dart';
 import '../screen/ocr/homepage.dart';
 import '../screen/routine_app/home_page.dart';
 import '../models/routine_model.dart';
-import '../screen/result_app/home_page.dart';
+import '../screen/result_app/user_result_screen.dart';
 import '../screen/skechpad/skechpad.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -35,16 +36,17 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             title: Text('Result App'),
-            onTap: () {
+            onTap: () async {
+              await Hive.openBox<Results>(kresultsBox);
               Navigator.pushReplacementNamed(
-                  context, ResultAppHomepage.routeName);
+                  context, UserResultScreen.routeName);
             },
           ),
           ListTile(
             title: Text('SkechPad'),
             onTap: () async {
               await Hive.openBox<ColoredPath>(sketchBox);
-              Navigator.pushReplacementNamed(context, DrawApp.routeName);
+              Navigator.pushNamed(context, DrawApp.routeName);
             },
           ),
           ListTile(
@@ -63,14 +65,10 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             title: Text('Notes'),
             onTap: () async {
-              // if (Hive.box(kHiveNoteBox).isOpen) {
-              //   Navigator.pushReplacementNamed(context, NotesScreen.routeName);
-              // } else {
               try {
                 await Hive.openBox<NoteModel>(kHiveNoteBox);
               } catch (e) {}
               Navigator.pushReplacementNamed(context, NotesScreen.routeName);
-              // }
             },
           ),
         ],

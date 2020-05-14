@@ -16,7 +16,7 @@ class NoteTagAdapter extends TypeAdapter<NoteTag> {
       case 1:
         return NoteTag.Work;
       case 2:
-        return NoteTag.Notes;
+        return NoteTag.Important;
       case 3:
         return NoteTag.Complete;
       default:
@@ -33,7 +33,7 @@ class NoteTagAdapter extends TypeAdapter<NoteTag> {
       case NoteTag.Work:
         writer.writeByte(1);
         break;
-      case NoteTag.Notes:
+      case NoteTag.Important:
         writer.writeByte(2);
         break;
       case NoteTag.Complete:

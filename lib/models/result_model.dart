@@ -34,9 +34,8 @@ class Results {
   @HiveField(3)
   String cgpa;
 
+  List<ResultModel> get allresult => [...results];
   Results({this.id, this.results, this.username, this.cgpa});
-
-  get allresult => [...results];
 
   // Hive fields go here
 }
