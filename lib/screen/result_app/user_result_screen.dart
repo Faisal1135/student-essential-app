@@ -62,27 +62,24 @@ class UserResultScreen extends StatelessWidget {
           itemCount: value.length,
           itemBuilder: (BuildContext context, int index) {
             final result = value.getAt(index);
-            return Hero(
-              tag: result.id,
-              child: ListTile(
-                leading: CircleAvatar(
-                  child: result.cgpa == null
-                      ? FittedBox(child: Text('No CGPA'))
-                      : FittedBox(child: Text(result.cgpa)),
-                  radius: 30,
-                ),
-                title: Text(result.username),
-                subtitle: Text(result.id),
-                onTap: () {
-                  Navigator.of(context).pushNamed(ResultofUserScreen.routeName,
-                      arguments: result);
+            return ListTile(
+              leading: CircleAvatar(
+                child: result.cgpa == null
+                    ? FittedBox(child: Text('No CGPA'))
+                    : FittedBox(child: Text(result.cgpa)),
+                radius: 30,
+              ),
+              title: Text(result.username),
+              subtitle: Text(result.id),
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamed(ResultofUserScreen.routeName, arguments: result);
+              },
+              trailing: IconButton(
+                icon: Icon(Icons.delete, color: Colors.red),
+                onPressed: () async {
+                  await resultsbox.deleteAt(index);
                 },
-                trailing: IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
-                  onPressed: () async {
-                    await resultsbox.deleteAt(index);
-                  },
-                ),
               ),
             );
           },

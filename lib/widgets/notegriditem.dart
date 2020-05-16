@@ -41,31 +41,7 @@ class NoteGriditem extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-
             Divider(),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: <Widget>[
-            // Text(
-            //   note.title,
-            //   overflow: TextOverflow.fade,
-            //   style: TextStyle(
-            //     color: Colors.black,
-            //     fontSize: 18.0,
-            //     fontWeight: FontWeight.w600,
-            //   ),
-            //     ),
-            // Divider(),
-            // Text(
-            //   _timeFormatter.format(note.datetime),
-            //   style: TextStyle(
-            //     color: Color(0xFFAFB4C6),
-            //     fontSize: 18.0,
-            //     fontWeight: FontWeight.w500,
-            //   ),
-            // ),
-            //   ],
-            // ),
             SizedBox(height: 15.0),
             Text(
               note.content,

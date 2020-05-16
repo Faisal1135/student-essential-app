@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 //screen import
@@ -37,8 +38,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Student essential',
       theme: ThemeData(
-        primarySwatch: Colors.purple,
-      ),
+          primarySwatch: Colors.purple,
+          textTheme: ThemeData.light().textTheme.copyWith(
+              bodyText1: GoogleFonts.zillaSlab(fontSize: 20),
+              bodyText2: GoogleFonts.zillaSlab(fontSize: 20))),
       initialRoute: "/",
       routes: {
         '/': (context) => MainScreen(),
