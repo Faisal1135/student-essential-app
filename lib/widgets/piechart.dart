@@ -32,9 +32,9 @@ class PieChartResult extends StatelessWidget {
         animate: true,
         animationDuration: Duration(seconds: 2),
         defaultRenderer: charts.ArcRendererConfig(
-            // arcWidth: 60,
+            arcWidth: 100,
             arcRendererDecorators: [
-              new charts.ArcLabelDecorator(
+              charts.ArcLabelDecorator(
                   labelPosition: charts.ArcLabelPosition.inside)
             ]),
       ),

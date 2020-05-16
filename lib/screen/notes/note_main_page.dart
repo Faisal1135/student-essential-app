@@ -172,6 +172,14 @@ class _NotesScreenState extends State<NotesScreen>
                         fontWeight: FontWeight.w500,
                       ),
                     ),
+                    Text(
+                      _dateFormatter.format(note.datetime),
+                      style: TextStyle(
+                        color: Color(0xFFAFB4C6),
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -205,7 +213,6 @@ class _NotesScreenState extends State<NotesScreen>
                 .where((note) => note.noteTag == NoteTag.Complete)
                 .length,
           };
-          final Size size = MediaQuery.of(context).size;
 
           return ListView(
             children: <Widget>[

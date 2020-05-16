@@ -1,4 +1,5 @@
 import '../../widgets/mydrawer.dart';
+import '../../widgets/notification.dart';
 import '../../constant.dart';
 import '../../data/day_of_week.dart';
 import '../../models/routine_model.dart';
@@ -117,7 +118,7 @@ class _RoutinePageState extends State<RoutinePage> {
     // int rowHeight ;//need a rowheight
     return Scaffold(
       appBar: AppBar(
-        title: Text('BoilerPlate Code'),
+        title: Text('Routine App'),
       ),
       drawer: MyDrawer(),
       floatingActionButton: FloatingActionButton(
@@ -132,8 +133,15 @@ class _RoutinePageState extends State<RoutinePage> {
         valueListenable: routineBox.listenable(),
         builder: (BuildContext context, Box<RoutineItem> value, Widget child) {
           final allRoutineFromDb = value.values.toList();
+          final payload = value.values
+              .where((rou) => rou.weekDay == DateTime.now().weekday)
+              .map((rout) => "  ${rout.routineTime} -${rout.routineText} \n")
+              .fold(" Today Routine ", (String pre, rou) => pre + rou);
           return ListView(
             children: <Widget>[
+              LocalNotification(
+                notifyPayload: payload,
+              ),
               DataTable(
                   dataRowHeight: getRowHeight(allRoutineFromDb) * 28.0 + 50.0,
                   columns: [

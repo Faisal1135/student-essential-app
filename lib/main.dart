@@ -40,8 +40,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.purple,
           textTheme: ThemeData.light().textTheme.copyWith(
+              headline4: GoogleFonts.yrsa(fontSize: 20),
               bodyText1: GoogleFonts.zillaSlab(fontSize: 20),
-              bodyText2: GoogleFonts.zillaSlab(fontSize: 20))),
+              bodyText2: GoogleFonts.yrsa(fontSize: 20))),
       initialRoute: "/",
       routes: {
         '/': (context) => MainScreen(),
