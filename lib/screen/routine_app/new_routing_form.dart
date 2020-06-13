@@ -13,7 +13,7 @@ class NewInputRoutine extends StatefulWidget {
 class _NewInputRoutineState extends State<NewInputRoutine> {
   TextEditingController titleController = TextEditingController();
   TimeOfDay pickedTime = TimeOfDay.now();
-  int selectedDay = 1;
+  int selectedDay = DateTime.now().weekday;
 
   Future<void> selectTime(BuildContext context) async {
     TimeOfDay _time =
@@ -45,14 +45,13 @@ class _NewInputRoutineState extends State<NewInputRoutine> {
     }
 
     final routineProv = Hive.box<RoutineItem>(kHiveRoutineBox);
+    final newRoutineItem = RoutineItem(
+        id: Uuid().v4(),
+        routineText: titleController.text,
+        routineTime: pickedTime.format(context),
+        weekDay: selectedDay);
     // final routineProv = Provider.of<RoutineProvider>(context, listen: false);
-    await routineProv.add(
-      RoutineItem(
-          id: Uuid().v4(),
-          routineText: titleController.text,
-          routineTime: pickedTime.format(context),
-          weekDay: selectedDay),
-    );
+    await routineProv.put(newRoutineItem.id, newRoutineItem);
     setState(() {
       pickedTime = null;
       titleController.text = "";

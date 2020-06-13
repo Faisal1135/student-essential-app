@@ -9,6 +9,41 @@ class ResultofUserScreen extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
+  String buildGrade(String grade) {
+    grade = grade.trim();
+    switch (grade) {
+      case "4.0":
+        return 'A+';
+        break;
+      case "3.75":
+        return 'A';
+        break;
+      case "3.50":
+        return 'A-';
+        break;
+      case "3.5":
+        return 'A-';
+        break;
+      case "3.25":
+        return 'B+';
+        break;
+      case "3.00":
+        return 'B';
+        break;
+      case "2.75":
+        return 'B-';
+        break;
+      case "2.50":
+        return 'C';
+        break;
+      case "2.25":
+        return 'D';
+        break;
+      default:
+        return "$grade";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final results = ModalRoute.of(context).settings.arguments as Results;
@@ -42,7 +77,7 @@ class ResultofUserScreen extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
                 leading: CircleAvatar(
-                  child: Text(result[index].grade.toString()),
+                  child: Text(buildGrade(result[index].grade.toString())),
                   radius: 20,
                 ),
                 title: Text(result[index].courseName),

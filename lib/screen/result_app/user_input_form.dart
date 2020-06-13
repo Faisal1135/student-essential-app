@@ -58,11 +58,11 @@ class UserFormScreen extends StatelessWidget {
                   print(formData);
                   final resultsbox = Hive.box<Results>(kresultsBox);
                   final newResults = Results(
-                      id: formData["student_id"],
-                      results:
-                          Hive.box<ResultModel>(kresultBox).values.toList(),
-                      username: formData["username"],
-                      cgpa: finalcpga.toStringAsFixed(2));
+                    id: formData["student_id"],
+                    results: Hive.box<ResultModel>(kresultBox).values.toList(),
+                    username: formData["username"],
+                    cgpa: finalcpga.toStringAsFixed(2),
+                  );
                   await resultsbox.add(newResults);
                   await Hive.box<ResultModel>(kresultBox).clear();
                   Navigator.of(context).pushNamed(UserResultScreen.routeName);

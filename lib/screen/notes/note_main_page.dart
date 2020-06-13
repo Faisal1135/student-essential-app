@@ -66,11 +66,8 @@ class _NotesScreenState extends State<NotesScreen>
         });
       },
       onDoubleTap: () {
-        List<NoteModel> passarg = tag == NoteTag.Important
-            ? argList.where((note) => note.isImportent == true).toList()
-            : argList.where((note) => note.noteTag == tag).toList();
         Navigator.of(context)
-            .pushNamed(NoteCatagoryScreen.routeName, arguments: passarg);
+            .pushNamed(NoteCatagoryScreen.routeName, arguments: tag);
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
@@ -180,6 +177,7 @@ class _NotesScreenState extends State<NotesScreen>
                         fontWeight: FontWeight.w500,
                       ),
                     ),
+                    Divider(),
                   ],
                 ),
               ),
@@ -213,6 +211,10 @@ class _NotesScreenState extends State<NotesScreen>
                 .where((note) => note.noteTag == NoteTag.Complete)
                 .length,
           };
+          List<NoteModel> allNoteSortDate = value.values.toList()
+            ..sort((a, b) => a.datetime.compareTo(b.datetime));
+
+          allNoteSortDate = allNoteSortDate.reversed.toList();
 
           return ListView(
             children: <Widget>[
@@ -235,7 +237,7 @@ class _NotesScreenState extends State<NotesScreen>
                   },
                 ),
               ),
-              _buildNotesList(value.values.toList())
+              _buildNotesList(allNoteSortDate)
             ],
           );
         },

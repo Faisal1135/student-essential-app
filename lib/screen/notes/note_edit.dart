@@ -18,6 +18,7 @@ class _EditNotePageState extends State<EditNotePage> {
   bool isNoteNew = true;
   FocusNode titleFocus = FocusNode();
   FocusNode contentFocus = FocusNode();
+  NoteTag selectedTag = NoteTag.Home;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
@@ -116,6 +117,24 @@ class _EditNotePageState extends State<EditNotePage> {
                       onPressed: handleBack,
                     ),
                     Spacer(),
+                    DropdownButton(
+                      value: selectedTag,
+                      items: [
+                        ...noteTagString.entries
+                            .toList()
+                            .map((e) => DropdownMenuItem(
+                                  child: Text('${e.value}'),
+                                  value: e.key,
+                                ))
+                            .toList()
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          selectedTag = value;
+                        });
+                      },
+                    ),
+                    Spacer(),
                     IconButton(
                       tooltip: 'Mark note as important',
                       icon: Icon(currentNote.isImportent
@@ -133,29 +152,15 @@ class _EditNotePageState extends State<EditNotePage> {
                       },
                     ),
                     AnimatedContainer(
-                      margin: EdgeInsets.only(left: 10),
-                      duration: Duration(milliseconds: 200),
-                      width: isDirty ? 120 : 0,
-                      height: 42,
-                      curve: Curves.decelerate,
-                      child: RaisedButton.icon(
-                        color: Theme.of(context).accentColor,
-                        textColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(80),
-                            bottomLeft: Radius.circular(80),
-                          ),
-                        ),
-                        icon: Icon(Icons.done),
-                        label: Text(
-                          'SAVE',
-                          style: TextStyle(letterSpacing: 1),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        onPressed: handleSave,
-                      ),
-                    )
+                        margin: EdgeInsets.only(left: 5),
+                        duration: Duration(milliseconds: 200),
+                        width: isDirty ? 80 : 0,
+                        height: 42,
+                        curve: Curves.decelerate,
+                        child: FlatButton(
+                          child: Text('SAVE'),
+                          onPressed: handleSave,
+                        ))
                   ],
                 ),
               ),
@@ -167,12 +172,13 @@ class _EditNotePageState extends State<EditNotePage> {
   }
 
   Future<void> handleSave() async {
-    if (titleController.text.isEmpty || contentController.text.isEmpty) {
+    if (contentController.text.isEmpty) {
       return;
     }
     setState(() {
       currentNote.title = titleController.text;
       currentNote.content = contentController.text;
+      currentNote.noteTag = selectedTag;
       print('Hey there ${currentNote.content}');
     });
     if (isNoteNew) {
@@ -183,6 +189,7 @@ class _EditNotePageState extends State<EditNotePage> {
     setState(() {
       isNoteNew = false;
       isDirty = false;
+      selectedTag = NoteTag.Home;
     });
     titleFocus.unfocus();
     contentFocus.unfocus();
@@ -241,3 +248,21 @@ class _EditNotePageState extends State<EditNotePage> {
     Navigator.pop(context);
   }
 }
+
+// RaisedButton.icon(
+//                         color: Theme.of(context).accentColor,
+//                         textColor: Colors.white,
+//                         shape: RoundedRectangleBorder(
+//                           borderRadius: BorderRadius.only(
+//                             topLeft: Radius.circular(80),
+//                             bottomLeft: Radius.circular(80),
+//                           ),
+//                         ),
+//                         icon: Icon(Icons.done),
+//                         label: Text(
+//                           'SAVE',
+//                           style: TextStyle(letterSpacing: 1),
+//                           overflow: TextOverflow.ellipsis,
+//                         ),
+//                         onPressed: handleSave,
+//                       ),

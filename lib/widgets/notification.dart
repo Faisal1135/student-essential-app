@@ -23,6 +23,12 @@ class _LocalNotificationState extends State<LocalNotification> {
     initializing();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _showNotifications();
+  }
+
   void initializing() async {
     androidInitializationSettings = AndroidInitializationSettings('app_icon');
     iosInitializationSettings = IOSInitializationSettings(
@@ -34,50 +40,44 @@ class _LocalNotificationState extends State<LocalNotification> {
   }
 
   void _showNotifications() async {
-    await notification();
+    await showNotificationDaily();
   }
 
-  void _showNotificationsAfterSecond() async {
-    await notificationAfterSec();
-  }
+  // Future<void> notification() async {
+  //   AndroidNotificationDetails androidNotificationDetails =
+  //       AndroidNotificationDetails(
+  //           'Channel ID', 'Channel title', 'channel body',
+  //           priority: Priority.High,
+  //           importance: Importance.Max,
+  //           ticker: 'test');
 
-  Future<void> notification() async {
-    AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-            'Channel ID', 'Channel title', 'channel body',
-            priority: Priority.High,
-            importance: Importance.Max,
-            ticker: 'test');
+  //   IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
 
-    IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
+  //   NotificationDetails notificationDetails =
+  //       NotificationDetails(androidNotificationDetails, iosNotificationDetails);
+  //   await flutterLocalNotificationsPlugin.show(
+  //       0, 'Hello there ', widget.notifyPayload, notificationDetails);
+  // }
 
-    NotificationDetails notificationDetails =
-        NotificationDetails(androidNotificationDetails, iosNotificationDetails);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'Hello there ', widget.notifyPayload, notificationDetails);
-  }
+  Future<void> showNotificationDaily() async {
+    var time = Time(12, 14, 30);
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'repeatDailyAtTime channel id',
+        'repeatDailyAtTime channel name',
+        'repeatDailyAtTime description');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
 
-  Future<void> notificationAfterSec() async {
-    var timeDelayed = DateTime.now().add(Duration(seconds: 5));
-    AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-            'second channel ID', 'second Channel title', 'second channel body',
-            priority: Priority.High,
-            importance: Importance.Max,
-            ticker: 'test');
-
-    IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
-
-    NotificationDetails notificationDetails =
-        NotificationDetails(androidNotificationDetails, iosNotificationDetails);
-    await flutterLocalNotificationsPlugin.schedule(1, 'Hello there',
-        'please subscribe my channel', timeDelayed, notificationDetails);
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.showDailyAtTime(
+        0, 'Tommorrow -', widget.notifyPayload, time, platformChannelSpecifics);
   }
 
   Future onSelectNotification(String payLoad) async {
     if (payLoad != null) {
       print(payLoad);
     }
+    // Navigator.pushNamed(context, ResultofUserScreen.routeName);
 
     // we can set navigator to navigate another screen
   }
@@ -91,7 +91,7 @@ class _LocalNotificationState extends State<LocalNotification> {
         CupertinoDialogAction(
             isDefaultAction: true,
             onPressed: () {
-              print("");
+              print("Notification Recive");
             },
             child: Text("Okay")),
       ],
@@ -100,18 +100,19 @@ class _LocalNotificationState extends State<LocalNotification> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: FlatButton(
-        color: Colors.blue,
-        onPressed: () => notification(),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Show Notification",
-            style: TextStyle(fontSize: 20.0, color: Colors.white),
-          ),
-        ),
-      ),
-    );
+    return Container();
   }
 }
+// Container(
+//       child: FlatButton(
+//         color: Colors.blue,
+//         onPressed: () => notification(),
+//         child: Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Text(
+//             "Show Notification",
+//             style: TextStyle(fontSize: 20.0, color: Colors.white),
+//           ),
+//         ),
+//       ),
+//     );
