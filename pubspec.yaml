@@ -19,27 +19,29 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  cupertino_icons: ^0.1.2
+  firebase_ml_vision: ^0.9.3+8
+  getflutter: ^1.0.11
+  flutter_hooks: ^0.15.0
   hive: ^1.4.1+1
   hive_flutter: ^0.3.0+2
-  flutter_form_builder: ^3.8.2
-  uuid: ^2.0.4
-  getflutter: ^1.0.11
-  firebase_ml_vision: ^0.9.3+8
   image_picker: ^0.6.6+1
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  uuid: ^2.0.4
+  google_fonts: ^1.1.0
+  intl: ^0.16.1
+  flutter_staggered_grid_view: ^0.3.0
+  charts_flutter: ^0.9.0
+  flutter_local_notifications: ^1.4.3
+  drawing_animation: ^0.1.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  hive_generator:
   build_runner: ^1.8.1
+  hive_generator: null
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter.
 flutter:
   # The following line ensures that the Material Icons font is

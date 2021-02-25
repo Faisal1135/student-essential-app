@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:student/screen/notes/note_catagory.dart';
+import 'package:student/screen/notes/note_edit.dart';
+import 'package:student/screen/notes/note_main_page.dart';
 import 'package:student/screen/ocr/homepage.dart';
 import './models/result_model.dart';
 import './models/routine_model.dart';
@@ -28,8 +32,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Student essential',
       theme: ThemeData(
-        primarySwatch: Colors.purple,
-      ),
+          primarySwatch: Colors.purple,
+          textTheme: ThemeData.light().textTheme.copyWith(
+              headline4: GoogleFonts.yrsa(fontSize: 20),
+              bodyText1: GoogleFonts.zillaSlab(fontSize: 20),
+              bodyText2: GoogleFonts.yrsa(fontSize: 20))),
       initialRoute: "/",
       routes: {
         '/': (context) => MainScreen(),
@@ -45,6 +52,11 @@ class MyApp extends StatelessWidget {
         RoutinePage.routeName: (context) => RoutinePage(),
         //Ocr APP
         OcrPage.routeName: (context) => OcrPage(),
+
+        //NoteApp
+        NotesScreen.routeName: (context) => NotesScreen(),
+        EditNotePage.routeName: (context) => EditNotePage(),
+        NoteCatagoryScreen.routeName: (context) => NoteCatagoryScreen(),
       },
     );
   }

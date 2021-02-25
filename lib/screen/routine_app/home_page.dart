@@ -1,3 +1,7 @@
+import 'package:student/widgets/notification.dart';
+
+import './routine_details.dart';
+
 import '../../widgets/mydrawer.dart';
 import '../../constant.dart';
 import '../../data/day_of_week.dart';
@@ -17,9 +21,14 @@ class RoutinePage extends StatefulWidget {
 
 class _RoutinePageState extends State<RoutinePage> {
   @override
-  void dispose() {
-    Hive.box(kHiveRoutineBox).close();
+  void dispose() async {
+    await Hive.box(kHiveRoutineBox).close();
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   int getRowHeight(List<RoutineItem> allRoutineFromDb) {
@@ -49,62 +58,87 @@ class _RoutinePageState extends State<RoutinePage> {
   }
 
   List<DataRow> buildDropDownRows(
-      BuildContext context, List<RoutineItem> allRoutineFromDb) {
-    var allRoutineMap = findByDayMap(allRoutineFromDb);
+      BuildContext context, Box<RoutineItem> routineBox) {
+    var allRoutineMap = findByDayMap(routineBox.values.toList());
     var dataRow = List<DataRow>();
 
     daysOfWeek.forEach((k, v) {
-      DataRow newDataRow = DataRow(cells: [
-        DataCell(Text(daysOfWeek[k])),
-        DataCell(
-          Container(
-            child: Column(
-              children: allRoutineMap[k]
-                  .map(
-                    (routine) => Container(
-                      margin: EdgeInsets.symmetric(vertical: 2.0),
-                      height: 25.0,
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: FittedBox(
-                              child: Text("${routine.routineTime}"),
+      DataRow newDataRow = DataRow(
+        cells: [
+          DataCell(
+            Text(daysOfWeek[k]),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (ctx) => RoutineDetails(
+                  routineItem: allRoutineMap[k],
+                  routineBox: routineBox,
+                ),
+              ),
+            ),
+          ),
+          DataCell(
+            Container(
+              child: Column(
+                children: allRoutineMap[k]
+                    .map(
+                      (routine) => Container(
+                        margin: EdgeInsets.symmetric(vertical: 2.0),
+                        height: 25.0,
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: FittedBox(
+                                child: Text("${routine.routineTime} "),
+                              ),
                             ),
-                          ),
-                          // SizedBox(height: 3.0),
-                          // Divider()
-                        ],
+                            Expanded(
+                              child: IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () async {
+                                  await routineBox.delete(routine.id);
+                                },
+                              ),
+                            ),
+
+                            // SizedBox(height: 3.0),
+                            // Divider()
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                  .toList(),
+                    )
+                    .toList(),
+              ),
             ),
           ),
-        ),
-        DataCell(
-          Container(
-            child: Column(
-              children: allRoutineMap[k]
-                  .map(
-                    (routine) => Container(
-                      margin: EdgeInsets.symmetric(vertical: 2.0),
-                      height: 25.0,
-                      width: double.infinity,
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                              child:
-                                  FittedBox(child: Text(routine.routineText))),
-                          // Divider()
-                        ],
+          DataCell(
+            Container(
+              child: Column(
+                children: allRoutineMap[k]
+                    .map(
+                      (routine) => Container(
+                        margin: EdgeInsets.symmetric(vertical: 2.0),
+                        height: 25.0,
+                        width: double.infinity,
+                        child: Column(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                routine.routineText,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            // Divider()
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                  .toList(),
+                    )
+                    .toList(),
+              ),
             ),
-          ),
-        )
-      ]);
+          )
+        ],
+      );
 
       dataRow.add(newDataRow);
     });
@@ -117,7 +151,7 @@ class _RoutinePageState extends State<RoutinePage> {
     // int rowHeight ;//need a rowheight
     return Scaffold(
       appBar: AppBar(
-        title: Text('BoilerPlate Code'),
+        title: Text('Routine App'),
       ),
       drawer: MyDrawer(),
       floatingActionButton: FloatingActionButton(
@@ -132,16 +166,36 @@ class _RoutinePageState extends State<RoutinePage> {
         valueListenable: routineBox.listenable(),
         builder: (BuildContext context, Box<RoutineItem> value, Widget child) {
           final allRoutineFromDb = value.values.toList();
+          final payload = value.values
+              .where((rou) => rou.weekDay == DateTime.now().weekday - 1)
+              .map((rout) => "  ${rout.routineTime} -${rout.routineText} \n")
+              .fold(" Today Routine ", (String pre, rou) => pre + rou);
+          LocalNotification(notifyPayload: payload);
           return ListView(
             children: <Widget>[
+              LocalNotification(
+                notifyPayload: payload,
+              ),
+              FlatButton(
+                color: Colors.blue,
+                onPressed: () async => await value.clear(),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Clear All data",
+                    style: TextStyle(fontSize: 20.0, color: Colors.white),
+                  ),
+                ),
+              ),
               DataTable(
+                  columnSpacing: 30,
                   dataRowHeight: getRowHeight(allRoutineFromDb) * 28.0 + 50.0,
                   columns: [
                     DataColumn(label: Text("Day")),
                     DataColumn(label: Text("Time")),
                     DataColumn(label: Text("Routine \nStudent")),
                   ],
-                  rows: buildDropDownRows(context, allRoutineFromDb)),
+                  rows: buildDropDownRows(context, value)),
             ],
           );
         },
@@ -149,6 +203,7 @@ class _RoutinePageState extends State<RoutinePage> {
     );
   }
 }
+
 // Operator Mono, Menlo, Monaco, 'Courier New', monospace
 // {1:[Routineitem,Routineitem,Routineitem,]}
 

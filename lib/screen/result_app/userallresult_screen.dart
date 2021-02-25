@@ -10,8 +10,9 @@ class ResultofUserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final result =
-        ModalRoute.of(context).settings.arguments as List<ResultModel>;
+    final results = ModalRoute.of(context).settings.arguments as Results;
+
+    final result = results.results;
     return Scaffold(
       appBar: AppBar(
         title: Text('User Result'),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:student/constant.dart';
-import '../../widgets/mydrawer.dart';
 import '../../models/result_model.dart';
 import '../../screen/result_app/user_input_form.dart';
 import '../../widgets/new_result_form.dart';
@@ -19,7 +18,6 @@ class ResultAppHomepage extends StatefulWidget {
 class _ResultAppHomepageState extends State<ResultAppHomepage> {
   Future<void> inithive() async {
     await Hive.openBox<ResultModel>(ResultAppHomepage.resultbox);
-    await Hive.openBox<Results>(ResultAppHomepage.resultsbox);
   }
 
   @override
@@ -48,7 +46,6 @@ class _ResultAppHomepageState extends State<ResultAppHomepage> {
               })
         ],
       ),
-      drawer: MyDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           return showModalBottomSheet(
