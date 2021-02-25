@@ -12,7 +12,7 @@ class MainScreen extends StatelessWidget {
         title: Text('Student Essential'),
       ),
       drawer: MyDrawer(),
-      body: Center(child: Text("ITS student essential")),
+      body: Center(child: Text("This App is For Mobarok Vai")),
     );
   }
 }

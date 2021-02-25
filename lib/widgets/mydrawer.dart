@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:hive/hive.dart';
+import 'package:student/screen/main_screen.dart';
 import '../models/note_model.dart';
 import '../models/result_model.dart';
 import '../screen/notes/note_main_page.dart';
@@ -35,6 +36,14 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
+            leading: Icon(Icons.home),
+            title: Text('HomePage'),
+            onTap: () async {
+              Navigator.pushReplacementNamed(context, "/");
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.pending),
             title: Text('Result App'),
             onTap: () async {
               await Hive.openBox<Results>(kresultsBox);
@@ -43,6 +52,7 @@ class MyDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: Icon(Icons.edit_outlined),
             title: Text('SkechPad'),
             onTap: () async {
               await Hive.openBox<ColoredPath>(sketchBox);
@@ -50,6 +60,7 @@ class MyDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: Icon(Icons.watch),
             title: Text('Routine'),
             onTap: () async {
               await Hive.openBox<RoutineItem>(kHiveRoutineBox);
@@ -57,12 +68,14 @@ class MyDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: Icon(Icons.text_format),
             title: Text('Text Recognizer'),
             onTap: () {
               Navigator.pushReplacementNamed(context, OcrPage.routeName);
             },
           ),
           ListTile(
+            leading: Icon(Icons.post_add),
             title: Text('Notes'),
             onTap: () async {
               try {
